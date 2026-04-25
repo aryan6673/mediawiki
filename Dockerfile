@@ -6,7 +6,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     libicu-dev \
     imagemagick \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql
+    libonig-dev \
+    libzip-dev \
+    && docker-php-ext-install intl mbstring pdo pdo_mysql zip
 
 RUN a2enmod rewrite
 
