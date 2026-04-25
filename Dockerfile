@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     imagemagick \
     libonig-dev \
     libzip-dev \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql zip
+    libpq-dev \
+    && docker-php-ext-install intl mbstring pdo pdo_mysql pdo_pgsql zip
 
 RUN a2enmod rewrite
 
