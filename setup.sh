@@ -9,10 +9,12 @@ cd /var/www/html
 : "${ADMIN_USER:?ADMIN_USER is required}"
 : "${ADMIN_PASS:?ADMIN_PASS is required}"
 
-# Check if database is already set up
-if [ ! -f "/var/www/html/.mw-installed" ]; then
+if [ -f "/var/www/html/LocalSettings.php" ]; then
+    echo "LocalSettings.php found; running update.php..."
+    php maintenance/update.php --quick
+    echo "Update completed."
+else
     echo "Running MediaWiki installer..."
-
     php maintenance/install.php \
         --dbtype=postgres \
         --dbserver="${DB_SERVER}" \
@@ -25,9 +27,6 @@ if [ ! -f "/var/www/html/.mw-installed" ]; then
         --pass="${ADMIN_PASS}" \
         "My Company Wiki" \
         "${ADMIN_USER}"
-
-    # Mark install complete
-    touch /var/www/html/.mw-installed
     echo "Installer completed successfully."
 fi
 
