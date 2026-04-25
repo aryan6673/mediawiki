@@ -22,9 +22,13 @@ RUN wget https://releases.wikimedia.org/mediawiki/1.39/mediawiki-1.39.0.tar.gz &
     rm -rf mediawiki-1.39.0 mediawiki-1.39.0.tar.gz
 
 COPY LocalSettings.php /var/www/html/
+COPY setup.sh /usr/local/bin/setup.sh
 
-RUN chown -R www-data:www-data /var/www/html
+RUN chmod +x /usr/local/bin/setup.sh && \
+    chown -R www-data:www-data /var/www/html && \
+    mkdir -p /var/www/html/images && \
+    chown -R www-data:www-data /var/www/html/images
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/usr/local/bin/setup.sh"]
