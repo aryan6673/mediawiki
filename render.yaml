@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: mediawiki
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DB_SERVER
+        fromService:
+          type: pserv
+          name: mediawiki-db
+          property: host
+      - key: DB_NAME
+        value: mediawiki
+      - key: DB_USER
+        value: mediawiki
+      - key: DB_PASSWORD
+        fromService:
+          type: pserv
+          name: mediawiki-db
+          property: password
+
+  - type: pserv
+    name: mediawiki-db
+    runtime: mysql
+    plan: free
+    ipAllowList: []
+    envVars:
+      - key: MYSQL_DATABASE
+        value: mediawiki
+      - key: MYSQL_USER
+        value: mediawiki
