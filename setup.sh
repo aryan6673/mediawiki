@@ -1,29 +1,34 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # MediaWiki Setup Script
 cd /var/www/html
 
+# Require admin credentials from environment
+: "${ADMIN_USER:?ADMIN_USER is required}"
+: "${ADMIN_PASS:?ADMIN_PASS is required}"
+
 # Check if database is already set up
-if [ ! -f "LocalSettings.php.bak" ]; then
+if [ ! -f "/var/www/html/.mw-installed" ]; then
     echo "Running MediaWiki installer..."
-    
-    # Run the installer
+
     php maintenance/install.php \
         --dbtype=postgres \
         --dbserver="${DB_SERVER}" \
-        --dbport="${DB_PORT}" \
+        --dbport="${DB_PORT:-5432}" \
         --dbname="${DB_NAME}" \
         --dbuser="${DB_USER}" \
         --dbpass="${DB_PASSWORD}" \
         --scriptpath="" \
         --lang=en \
-        --pass=admin123 \
+        --pass="${ADMIN_PASS}" \
         "My Company Wiki" \
-        "Admin"
-    
-    # Backup the generated LocalSettings.php
-    cp LocalSettings.php LocalSettings.php.generated
-    echo "Installer completed!"
+        "${ADMIN_USER}"
+
+    # Mark install complete
+    touch /var/www/html/.mw-installed
+    echo "Installer completed successfully."
 fi
 
 # Start Apache
