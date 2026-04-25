@@ -1,5 +1,5 @@
 <?php
-// MediaWiki 1.39 Configuration File
+// MediaWiki 1.39 Configuration File for PostgreSQL
 
 // Determine the server URL dynamically
 if ( isset( $_SERVER['HTTP_HOST'] ) ) {
@@ -12,9 +12,10 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 $wgSitename = "My Company Wiki";
 $wgMetaNamespace = "Project";
 
-// Database configuration
-$wgDBtype = "mysql";
+// Database configuration - PostgreSQL
+$wgDBtype = "postgres";
 $wgDBserver = getenv('DB_SERVER') ?: "localhost";
+$wgDBport = getenv('DB_PORT') ?: 5432;
 $wgDBname = getenv('DB_NAME') ?: "mediawiki";
 $wgDBuser = getenv('DB_USER') ?: "mediawiki";
 $wgDBpassword = getenv('DB_PASSWORD') ?: "password";
@@ -24,7 +25,6 @@ $wgDBprefix = "";
 $wgScriptPath = "";
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
-$wgRedirectScript = "$wgScriptPath/redirect.php";
 
 // Logo
 $wgLogo = "$wgScriptPath/resources/assets/wiki.png";
@@ -35,11 +35,8 @@ $wgLanguageCode = "en";
 // Timezone
 date_default_timezone_set( 'UTC' );
 
-// Email configuration
-$wgEnableEmail = true;
-$wgEnableUserEmail = true;
-$wgEmergencyContact = "admin@example.com";
-$wgPasswordSender = "noreply@example.com";
+// Email - disabled for now
+$wgEnableEmail = false;
 
 // File uploads
 $wgEnableUploads = true;
@@ -62,8 +59,6 @@ $wgGroupPermissions['sysop']['undelete'] = true;
 $wgGroupPermissions['sysop']['protect'] = true;
 $wgGroupPermissions['sysop']['block'] = true;
 $wgGroupPermissions['sysop']['move'] = true;
-
-// Admin user
 $wgGroupPermissions['bureaucrat']['bureaucrat'] = true;
 
 // Security
@@ -80,10 +75,6 @@ $wgUseFileCache = false;
 
 // Logging
 $wgDebugLogFile = false;
-
-// Extensions (add more as needed)
-// wfLoadExtension( 'VisualEditor' );
-// wfLoadExtension( 'TemplateData' );
 
 // Initialize images directory if needed
 if ( !is_dir( $IP . '/images' ) ) {
